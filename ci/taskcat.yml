@@ -1,7 +1,7 @@
 global:
   marketplace: true
   owner: quickstart-eng@amazon.com
-  qsname: quickstart-ansible
+  qsname: quickstart-redhat-ansible
   s3bucket: tonynv
   regions:
     - ap-northeast-1
@@ -17,13 +17,13 @@ global:
     - us-west-2
   reporting: true
 tests:
-  tower-vpc:
-    parameter_input: ansible-tower-taskcat.json
-    template_file: ansible-tower-master.template
-    regions:
-      - us-east-1
+#  tower-vpc:
+#    parameter_input: ansible-tower-vpc.json
+#    template_file: ansible-tower-master.template
+#    regions:
+#      - us-east-1
   tower:
-    parameter_input: ansible-tower-novpctaskcat.json
+    parameter_input: ansible-tower.json
     template_file: ansible-tower.template
     regions:
       - us-east-1

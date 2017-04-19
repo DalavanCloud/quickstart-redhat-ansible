@@ -1,0 +1,38 @@
+[
+    {
+        "ParameterKey": "AnsibleAdminPassword",
+        "ParameterValue": "AnsibleAdmin1"
+    },
+    {
+        "ParameterKey": "AnsibleClientLinuxIP",
+        "ParameterValue": "10.0.0.10"
+    },
+    {
+        "ParameterKey": "AnsibleTowerIP",
+        "ParameterValue": "10.0.0.12"
+    },
+    {
+        "ParameterKey": "DatabaseAdminPassword",
+        "ParameterValue": "AnsibleAdmin1"
+    },
+    {
+        "ParameterKey": "KeyPairName",
+        "ParameterValue": "tonynv"
+    },
+    {
+        "ParameterKey": "RemoteAdminCIDR",
+        "ParameterValue": "0.0.0.0/0"
+    },
+    {
+        "ParameterKey": "SubnetId",
+        "ParameterValue": "subnet-8ab7ebef"
+    },
+    {
+        "ParameterKey": "VPC",
+        "ParameterValue": "vpc-12686074"
+    },
+    {
+        "ParameterKey": "VPCCIDR",
+        "ParameterValue": "10.0.0.0/16"
+    }
+]
