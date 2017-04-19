@@ -340,7 +340,9 @@
                                 "\n",
                                 "SRC=https://s3.amazonaws.com/quickstart-reference/redhat/ansible/latest/scripts/ansible-tower.sh",
                                 "\n",
-                                "curl -L $SRC | bash;",
+                                "curl  -s ${SRC} -O; ",
+                                "chmod 755 ansible-tower.sh; ",
+                                "./ansible-tower.sh; ",
                                 "/usr/bin/cfn-signal",
                                 " -e $?",
                                 " '", {
@@ -509,7 +511,7 @@
             "Value": {
                 "Fn::Join": [
                     "/", [
-                        "https://", {
+                        "https:/", {
                             "Fn::GetAtt": [
                                 "AnsibleTower",
                                 "PublicDnsName"

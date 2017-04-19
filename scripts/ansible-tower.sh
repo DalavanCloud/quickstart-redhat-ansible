@@ -33,12 +33,17 @@ tar -zxvf ${ANSIBLE_SOURCE_FILE}
 cd ansible-tower-setup*
 echo "Moved to `pwd`"
 
+# Create Log dir for Ansible
+mkdir -p  /var/log/tower 
+
 # Setup ssh keys
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -N ""
 cat ~/.ssh/id_rsa.pub   >>~/.ssh/authorized_keys
 KNOWNHOSTS="0,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
 echo $KNOWNHOSTS >>~/.ssh/known_hosts 
 KNOWNHOSTS="$EC2_PRIVATEIP,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
+echo $KNOWNHOSTS >>~/.ssh/known_hosts 
+KNOWNHOSTS="$EC2_HOSTNAME,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
 echo $KNOWNHOSTS >>~/.ssh/known_hosts 
 
 # Relax the min var requirements
