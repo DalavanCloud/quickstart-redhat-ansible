@@ -10,6 +10,7 @@ DATE=`date +%d-%m-%Y`
 ######################################################################
 # Ec2 Metadata Variables
 EC2_HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/hostname)
+EC2_PRIVATEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 
 ######################################################################
 #Source Files
@@ -35,6 +36,10 @@ echo "Moved to `pwd`"
 # Setup ssh keys
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -N ""
 cat ~/.ssh/id_rsa.pub   >>~/.ssh/authorized_keys
+KNOWNHOSTS="0,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
+echo $KNOWNHOSTS >>~/.ssh/known_hosts 
+KNOWNHOSTS="$EC2_PRIVATEIP,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
+echo $KNOWNHOSTS >>~/.ssh/known_hosts 
 
 # Relax the min var requirements
 sed -i -e "s/Defaults    requiretty/Defaults    \!requiretty/" /etc/sudoers
