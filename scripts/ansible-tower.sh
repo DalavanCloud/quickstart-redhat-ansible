@@ -9,9 +9,15 @@ DATE=`date +%d-%m-%Y`
 
 ######################################################################
 # Ec2 Metadata Variables
+######################################################################
 EC2_HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/hostname)
 EC2_PRIVATEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 
+######################################################################
+# Enable epel and install packages
+######################################################################
+#yum install -y http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#yum install -y ansible
 ######################################################################
 #Source Files
 ######################################################################
@@ -39,9 +45,13 @@ mkdir -p  /var/log/tower
 # Setup ssh keys
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -N ""
 cat ~/.ssh/id_rsa.pub   >>~/.ssh/authorized_keys
+KNOWNHOSTS="localhost,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
+echo $KNOWNHOSTS >>~/.ssh/known_hosts 
 KNOWNHOSTS="0,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
 echo $KNOWNHOSTS >>~/.ssh/known_hosts 
 KNOWNHOSTS="$EC2_PRIVATEIP,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
+echo $KNOWNHOSTS >>~/.ssh/known_hosts 
+KNOWNHOSTS="127.0.0.1,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
 echo $KNOWNHOSTS >>~/.ssh/known_hosts 
 KNOWNHOSTS="$EC2_HOSTNAME,$(ssh-keyscan  0.0.0.0 | grep 0.0.0.0)"
 echo $KNOWNHOSTS >>~/.ssh/known_hosts 
@@ -63,7 +73,7 @@ ANSIBLE_DBADMIN_PASSWD=`cat $ADMINFO| grep ansible_dbadmin_password | awk -F"|" 
 >inventory
 cat <<EOF >> inventory
 [tower]
-${EC2_HOSTNAME}
+${EC2_HOSTNAME} ansible_connection=local
 
 [database]
 
@@ -79,9 +89,12 @@ pg_password=${ANSIBLE_DBADMIN_PASSWD}
 
 rabbitmq_port=5672
 rabbitmq_vhost=tower
-rabbitmq_username=tower
-rabbitmq_password=${ANSIBLE_ADMIN_PASSWD}
+rabbitmq_username=rabbitmq
+rabbitmq_password=${ANSIBLE_DBADMIN_PASSWD}
 rabbitmq_cookie=rabbitmqcookie
+
+rabbitmq_use_long_name=true
+
 
 EOF
 
