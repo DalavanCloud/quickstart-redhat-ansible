@@ -24,14 +24,6 @@
         "ParameterValue": "0.0.0.0/0"
     },
     {
-        "ParameterKey": "SubnetId",
-        "ParameterValue": "subnet-8ab7ebef"
-    },
-    {
-        "ParameterKey": "VPC",
-        "ParameterValue": "vpc-12686074"
-    },
-    {
         "ParameterKey": "VPCCIDR",
         "ParameterValue": "10.0.0.0/16"
     }

@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "AnsibleAdminPassword",
-        "ParameterValue": "AnsibleAdmin1"
+        "ParameterValue": "$[alfred_genpass_16]"
     },
     {
         "ParameterKey": "AnsibleClientLinuxIP",
@@ -13,15 +13,15 @@
     },
     {
         "ParameterKey": "DatabaseAdminPassword",
-        "ParameterValue": "AnsibleAdmin1"
+        "ParameterValue": "$[alfred_genpass_16]"
     },
     {
         "ParameterKey": "KeyPairName",
-        "ParameterValue": "tonynv"
+        "ParameterValue": "cikey"
     },
     {
         "ParameterKey": "AccessCIDR",
-        "ParameterValue": "0.0.0.0/0"
+        "ParameterValue": "1.2.3.4/32"
     },
     {
         "ParameterKey": "VPCCIDR",

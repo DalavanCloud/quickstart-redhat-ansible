@@ -17,14 +17,9 @@ global:
     - us-west-2
   reporting: true
 tests:
-#  tower-vpc:
-#    parameter_input: ansible-tower-vpc.json
-#    template_file: ansible-tower-master.template
-#    regions:
-#      - us-east-1
   tower:
-    parameter_input: ansible-tower.json
-    template_file: ansible-tower.template
+    parameter_input: ansible-tower-master.json
+    template_file: ansible-tower-master.template
     regions:
       - us-east-1
 

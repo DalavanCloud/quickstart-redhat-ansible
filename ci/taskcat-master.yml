@@ -18,7 +18,7 @@ global:
   reporting: true
 tests:
   tower:
-    parameter_input: ansible-tower-master.json
+    parameter_input: ansible-tower-taskcat.json
     template_file: ansible-tower-master.template
     regions:
       - us-east-1
