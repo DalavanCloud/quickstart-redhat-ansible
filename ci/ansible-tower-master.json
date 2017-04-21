@@ -1,0 +1,30 @@
+[
+    {
+        "ParameterKey": "AnsibleAdminPassword",
+        "ParameterValue": "AnsibleAdmin1"
+    },
+    {
+        "ParameterKey": "ClientIP",
+        "ParameterValue": "10.0.0.10"
+    },
+    {
+        "ParameterKey": "TowerIP",
+        "ParameterValue": "10.0.0.12"
+    },
+    {
+        "ParameterKey": "DatabaseAdminPassword",
+        "ParameterValue": "AnsibleAdmin1"
+    },
+    {
+        "ParameterKey": "KeyPairName",
+        "ParameterValue": "tonynv"
+    },
+    {
+        "ParameterKey": "AccessCIDR",
+        "ParameterValue": "0.0.0.0/0"
+    },
+    {
+        "ParameterKey": "VPCCIDR",
+        "ParameterValue": "10.0.0.0/16"
+    }
+]
