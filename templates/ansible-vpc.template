@@ -136,11 +136,11 @@
         }
     },
     "Outputs": {
-        "VPC": {
+        "VPCID": {
             "Value": {
                 "Ref": "VPC"
             },
-            "Description": "VPC ID"
+            "Description": "VPCID"
         },
         "SubnetId": {
             "Value": {

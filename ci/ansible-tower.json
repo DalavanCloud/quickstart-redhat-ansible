@@ -4,11 +4,11 @@
         "ParameterValue": "AnsibleAdmin1"
     },
     {
-        "ParameterKey": "AnsibleClientLinuxIP",
+        "ParameterKey": "ClientIP",
         "ParameterValue": "10.0.0.10"
     },
     {
-        "ParameterKey": "AnsibleTowerIP",
+        "ParameterKey": "TowerIP",
         "ParameterValue": "10.0.0.12"
     },
     {
@@ -20,7 +20,7 @@
         "ParameterValue": "tonynv"
     },
     {
-        "ParameterKey": "RemoteAdminCIDR",
+        "ParameterKey": "AccessCIDR",
         "ParameterValue": "0.0.0.0/0"
     },
     {
