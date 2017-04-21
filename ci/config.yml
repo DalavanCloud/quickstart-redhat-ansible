@@ -20,6 +20,3 @@ tests:
   tower:
     parameter_input: ansible-tower-master.json
     template_file: ansible-tower-master.template
-    regions:
-      - us-east-1
-
