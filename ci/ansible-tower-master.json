@@ -4,11 +4,11 @@
         "ParameterValue": "AnsibleAdmin1"
     },
     {
-        "ParameterKey": "ClientIP",
+        "ParameterKey": "AnsibleClientLinuxIP",
         "ParameterValue": "10.0.0.10"
     },
     {
-        "ParameterKey": "TowerIP",
+        "ParameterKey": "AnsibleTowerIP",
         "ParameterValue": "10.0.0.12"
     },
     {

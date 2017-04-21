@@ -14,11 +14,6 @@ EC2_HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/hostname)
 EC2_PRIVATEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 
 ######################################################################
-# Enable epel and install packages
-######################################################################
-#yum install -y http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-#yum install -y ansible
-######################################################################
 #Source Files
 ######################################################################
 ANSIBLE_SOURCE="https://releases.ansible.com/ansible-tower/setup-bundle"
@@ -31,7 +26,7 @@ echo "Installing Ansible Tower"
 echo "Working in `pwd`"
 curl -s ${ANSIBLE_SOURCE}/${ANSIBLE_SOURCE_FILE} -O
 
-echo "Extract"
+echo "Extract Source"
 #Extract src_files
 tar -zxvf ${ANSIBLE_SOURCE_FILE}
 

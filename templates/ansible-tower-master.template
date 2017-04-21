@@ -10,21 +10,21 @@
         "Parameters": [
           "VPCCIDR",
           "AccessCIDR",
+          "SubnetCIDR"
         ]
       }, {
         "Label": {
           "default": "Ansible Configuration"
         },
         "Parameters": [
-          "TowerIP",
-          "ClientIP",
-          "SubnetCIDR",
+          "KeyPairName",
+          "AnsibleTowerIP",
+          "AnsibleClientLinuxIP",
           "AnsibleAdminPassword",
           "DatabaseAdminPassword",
-          "TowerInstanceType",
-          "ClientInstanceType",
-          "OSType",
-          "KeyPairName"
+          "AnsibleTowerInstanceType",
+          "AnsibleClientInstanceType",
+          "OSType"
         ]
       }, {
         "Label": {
@@ -39,10 +39,10 @@
         "KeyPairName": {
           "default": "Key Pair Name"
         },
-        "TowerInstanceType": {
+        "AnsibleTowerInstanceType": {
           "default": "Tower Instance Type"
         },
-        "ClientInstanceType": {
+        "AnsibleClientInstanceType": {
           "default": "Client Instance Type"
         },
         "QSS3BucketName": {
@@ -51,19 +51,19 @@
         "QSS3KeyPrefix": {
           "default": "Quick Start S3 Key Prefix"
         },
+        "DatabaseAdminPassword": {
+          "default": "Database Admin Password"
+        },
         "AnsibleAdminPassword": {
           "default": "Ansible Tower Admin Pasword"
         },
         "OSType": {
           "default": "Operating System"
         },
-        "TowerIP": {
+        "AnsibleTowerIP": {
           "default": "Ansible Tower IP Address"
         },
-        "DatabaseAdminPassword": {
-          "default": "Database Admin Password"
-        },
-        "ClientIP": {
+        "AnsibleClientLinuxIP": {
           "default": "Linux Client IP address"
         },
         "AccessCIDR": {
@@ -105,18 +105,18 @@
       "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
       "NoEcho": "true"
     },
-    "TowerIP": {
+    "AnsibleTowerIP": {
       "Description": "Ansible Tower IP Address",
       "Type": "String",
       "Default": "10.0.0.10"
     },
-    "ClientIP": {
+    "AnsibleClientLinuxIP": {
       "Description": "Linux client IP Address",
       "Type": "String",
       "Default": "10.0.0.12"
     },
-    "TowerInstanceType": {
-      "Description": "Amazon EC2 instance type for the Tower Server",
+    "AnsibleTowerInstanceType": {
+      "Description": "Amazon EC2 instance type for the Config Server",
       "Type": "String",
       "Default": "m4.large",
       "AllowedValues": [
@@ -147,8 +147,8 @@
         "i2.8xlarge"
       ]
     },
-    "ClientInstanceType": {
-      "Description": "Amazon EC2 instance type for the Linux clients.",
+    "AnsibleClientInstanceType": {
+      "Description": "Amazon EC2 instance type for the Linux nodes.",
       "Type": "String",
       "Default": "t2.medium",
       "AllowedValues": [
@@ -180,6 +180,7 @@
         "i2.8xlarge"
       ]
     },
+
     "VPCCIDR": {
       "Description": "CIDR Block for the VPC",
       "Type": "String",
@@ -259,6 +260,70 @@
           "VPCCIDR": {
             "Ref": "VPCCIDR"
           }
+        }
+      }
+    },
+    "TowerStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "DependsOn": "VPCStack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Sub": [
+            "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/ansible-tower.template", {
+              "S3Region": {
+                "Fn::If": [
+                  "GovCloudCondition",
+                  "s3-us-gov-west-1",
+                  "s3"
+                ]
+              }
+            }
+          ]
+        },
+        "Parameters": {
+          "KeyPairName": {
+            "Ref": "KeyPairName"
+          },
+          "AccessCIDR": {
+            "Ref": "AccessCIDR"
+          },
+          "AnsibleTowerIP": {
+            "Ref": "AnsibleTowerIP"
+          },
+          "AnsibleClientLinuxIP": {
+            "Ref": "AnsibleClientLinuxIP"
+          },
+          "AnsibleAdminPassword": {
+            "Ref": "AnsibleAdminPassword"
+          },
+          "DatabaseAdminPassword": {
+            "Ref": "DatabaseAdminPassword"
+          },
+          "AnsibleClientInstanceType": {
+            "Ref": "AnsibleClientInstanceType"
+          },
+          "AnsibleTowerInstanceType": {
+            "Ref": "AnsibleTowerInstanceType"
+          },
+          "OSType": {
+            "Ref": "OSType"
+          },
+          "VPCCIDR": {
+            "Ref": "VPCCIDR"
+          },
+          "VPCID": {
+            "Fn::GetAtt": [
+              "VPCStack",
+              "Outputs.VPCID"
+            ]
+          },
+          "SubnetId": {
+            "Fn::GetAtt": [
+              "VPCStack",
+              "Outputs.SubnetId"
+            ]
+          }
+
         }
       }
     }

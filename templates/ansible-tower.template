@@ -10,11 +10,11 @@
             "Description": "VPC Subnet ID for EC2 Instances",
             "Type": "AWS::EC2::Subnet::Id"
         },
-        "VPC": {
+        "VPCID": {
             "Description": "VPC Id",
             "Type": "AWS::EC2::VPC::Id"
         },
-        "RemoteAdminCIDR": {
+        "AccessCIDR": {
             "Description": "CIDR Block or IP for SSH and RDP access",
             "Type": "String",
             "Default": "0.0.0.0/0",
@@ -24,6 +24,11 @@
             "Description": "IP for the ansible master",
             "Type": "String",
             "Default": "172.31.0.10"
+        },
+        "AnsibleClientLinuxIP": {
+            "Description": "IP for the ansible client",
+            "Type": "String",
+            "Default": "172.31.0.11"
         },
         "AnsibleAdminPassword": {
             "Description": "Password for Ansible Admin Must be at least 8 characters containing letters and (minimum 1 capital letter), numbers and symbols",
@@ -40,11 +45,6 @@
             "MaxLength": "32",
             "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
             "NoEcho": "true"
-        },
-        "AnsibleClientLinuxIP": {
-            "Description": "IP for the ansible client",
-            "Type": "String",
-            "Default": "172.31.0.11"
         },
         "AnsibleTowerInstanceType": {
             "Description": "Amazon EC2 instance type for the Config Server",
@@ -78,7 +78,7 @@
                 "i2.8xlarge"
             ]
         },
-        "LinuxClientInstanceType": {
+        "AnsibleClientInstanceType": {
             "Description": "Amazon EC2 instance type for the Linux nodes.",
             "Type": "String",
             "Default": "t2.medium",
@@ -393,7 +393,7 @@
                     ]
                 },
                 "InstanceType": {
-                    "Ref": "LinuxClientInstanceType"
+                    "Ref": "AnsibleClientInstanceType"
                 },
                 "NetworkInterfaces": [{
                     "DeleteOnTermination": "true",
@@ -439,14 +439,14 @@
             "Properties": {
                 "GroupDescription": "Enables access to the Ansible tower",
                 "VpcId": {
-                    "Ref": "VPC"
+                    "Ref": "VPCID"
                 },
                 "SecurityGroupIngress": [{
                     "IpProtocol": "tcp",
                     "FromPort": "22",
                     "ToPort": "22",
                     "CidrIp": {
-                        "Ref": "RemoteAdminCIDR"
+                        "Ref": "AccessCIDR"
                     }
                 }, {
                     "IpProtocol": "tcp",
@@ -460,21 +460,21 @@
                     "FromPort": "443",
                     "ToPort": "443",
                     "CidrIp": {
-                        "Ref": "RemoteAdminCIDR"
+                        "Ref": "AccessCIDR"
                     }
                 }, {
                     "IpProtocol": "tcp",
                     "FromPort": "8080",
                     "ToPort": "8080",
                     "CidrIp": {
-                        "Ref": "RemoteAdminCIDR"
+                        "Ref": "AccessCIDR"
                     }
                 }, {
                     "IpProtocol": "tcp",
                     "FromPort": "80",
                     "ToPort": "80",
                     "CidrIp": {
-                        "Ref": "RemoteAdminCIDR"
+                        "Ref": "AccessCIDR"
                     }
                 }]
             }
@@ -484,14 +484,14 @@
             "Properties": {
                 "GroupDescription": "Enables access to the ansible communication",
                 "VpcId": {
-                    "Ref": "VPC"
+                    "Ref": "VPCID"
                 },
                 "SecurityGroupIngress": [{
                     "IpProtocol": "tcp",
                     "FromPort": "22",
                     "ToPort": "22",
                     "CidrIp": {
-                        "Ref": "RemoteAdminCIDR"
+                        "Ref": "AccessCIDR"
                     }
                 }, {
                     "IpProtocol": "tcp",

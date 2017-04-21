@@ -140,7 +140,7 @@
             "Value": {
                 "Ref": "VPC"
             },
-            "Description": "VPCID"
+            "Description": "VPC ID"
         },
         "SubnetId": {
             "Value": {
