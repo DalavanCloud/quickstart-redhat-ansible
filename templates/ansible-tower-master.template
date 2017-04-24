@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,18,2016",
+  "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,24,2016",
   "Metadata": {
     "AWS::CloudFormation::Interface": {
       "ParameterGroups": [{
