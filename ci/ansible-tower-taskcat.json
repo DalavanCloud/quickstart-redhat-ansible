@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "AnsibleAdminPassword",
-        "ParameterValue": "AnsibleAdmin1"
+        "ParameterValue": "$[taskcat_genpass_8]"
     },
     {
         "ParameterKey": "AnsibleClientLinuxIP",
@@ -13,7 +13,7 @@
     },
     {
         "ParameterKey": "DatabaseAdminPassword",
-        "ParameterValue": "AnsibleAdmin1"
+        "ParameterValue": "$[taskcat_genpass_8]"
     },
     {
         "ParameterKey": "KeyPairName",
