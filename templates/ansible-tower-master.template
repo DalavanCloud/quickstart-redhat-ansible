@@ -185,8 +185,7 @@
             "Type": "String",
             "Default": "10.0.0.0/16",
             "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-            "Description": "CIDR block for the VPC to create.",
-
+            "Description": "CIDR block for the VPC to create."
         },
         "SubnetCIDR": {
             "Description": "CIDR Block for the Public Subnet",
