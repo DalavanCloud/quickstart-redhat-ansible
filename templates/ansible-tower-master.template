@@ -1,332 +1,332 @@
 {
-  "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,26,2016",
-  "Metadata": {
-    "AWS::CloudFormation::Interface": {
-      "ParameterGroups": [{
-        "Label": {
-          "default": "Network Configuration"
-        },
-        "Parameters": [
-          "VPCCIDR",
-          "AccessCIDR",
-          "SubnetCIDR"
-        ]
-      }, {
-        "Label": {
-          "default": "Ansible Configuration"
-        },
-        "Parameters": [
-          "KeyPairName",
-          "AnsibleTowerIP",
-          "AnsibleClientLinuxIP",
-          "AnsibleAdminPassword",
-          "DatabaseAdminPassword",
-          "AnsibleTowerInstanceType",
-          "AnsibleClientInstanceType",
-          "OSType"
-        ]
-      }, {
-        "Label": {
-          "default": "AWS Quick Start Configuration"
-        },
-        "Parameters": [
-          "QSS3BucketName",
-          "QSS3KeyPrefix"
-        ]
-      }],
-      "ParameterLabels": {
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,26,2016",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [{
+                "Label": {
+                    "default": "Network Configuration"
+                },
+                "Parameters": [
+                    "VPCCIDR",
+                    "AccessCIDR",
+                    "SubnetCIDR"
+                ]
+            }, {
+                "Label": {
+                    "default": "Ansible Configuration"
+                },
+                "Parameters": [
+                    "KeyPairName",
+                    "AnsibleTowerIP",
+                    "AnsibleClientLinuxIP",
+                    "AnsibleAdminPassword",
+                    "DatabaseAdminPassword",
+                    "AnsibleTowerInstanceType",
+                    "AnsibleClientInstanceType",
+                    "OSType"
+                ]
+            }, {
+                "Label": {
+                    "default": "AWS Quick Start Configuration"
+                },
+                "Parameters": [
+                    "QSS3BucketName",
+                    "QSS3KeyPrefix"
+                ]
+            }],
+            "ParameterLabels": {
+                "KeyPairName": {
+                    "default": "Key Pair Name"
+                },
+                "AnsibleTowerInstanceType": {
+                    "default": "Tower Instance Type"
+                },
+                "AnsibleClientInstanceType": {
+                    "default": "Client Instance Type"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start S3 Bucket Name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Key Prefix"
+                },
+                "DatabaseAdminPassword": {
+                    "default": "Database Admin Password"
+                },
+                "AnsibleAdminPassword": {
+                    "default": "Ansible Tower Admin Password"
+                },
+                "OSType": {
+                    "default": "Operating System"
+                },
+                "AnsibleTowerIP": {
+                    "default": "Ansible Tower IP Address"
+                },
+                "AnsibleClientLinuxIP": {
+                    "default": "Linux Client IP address"
+                },
+                "AccessCIDR": {
+                    "default": "Permitted IP range"
+                },
+                "SubnetCIDR": {
+                    "default": "Subnet CIDR"
+                },
+                "VPCCIDR": {
+                    "default": "VPC CIDR"
+                }
+            }
+        }
+    },
+    "Parameters": {
         "KeyPairName": {
-          "default": "Key Pair Name"
-        },
-        "AnsibleTowerInstanceType": {
-          "default": "Tower Instance Type"
-        },
-        "AnsibleClientInstanceType": {
-          "default": "Client Instance Type"
-        },
-        "QSS3BucketName": {
-          "default": "Quick Start S3 Bucket Name"
-        },
-        "QSS3KeyPrefix": {
-          "default": "Quick Start S3 Key Prefix"
-        },
-        "DatabaseAdminPassword": {
-          "default": "Database Admin Password"
-        },
-        "AnsibleAdminPassword": {
-          "default": "Ansible Tower Admin Password"
-        },
-        "OSType": {
-          "default": "Operating System"
-        },
-        "AnsibleTowerIP": {
-          "default": "Ansible Tower IP Address"
-        },
-        "AnsibleClientLinuxIP": {
-          "default": "Linux Client IP address"
+            "Description": "Public/private key pair",
+            "Type": "AWS::EC2::KeyPair::KeyName"
         },
         "AccessCIDR": {
-          "default": "Permitted IP range"
+            "Description": "A value of 0.0.0.0/0 will allow access from ANY ip address",
+            "Type": "String",
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
+        },
+        "AnsibleAdminPassword": {
+            "Description": "Password for Ansible Admin Must be at least 8 characters containing letters and (minimum 1 capital letter), numbers and symbols",
+            "Type": "String",
+            "MinLength": "8",
+            "MaxLength": "32",
+            "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
+            "NoEcho": "true"
+        },
+        "DatabaseAdminPassword": {
+            "Description": "Password for Ansible Admin Must be at least 8 characters containing letters and (minimum 1 capital letter), numbers and symbols",
+            "Type": "String",
+            "MinLength": "8",
+            "MaxLength": "32",
+            "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
+            "NoEcho": "true"
+        },
+        "AnsibleTowerIP": {
+            "Description": "Ansible Tower IP Address",
+            "Type": "String",
+            "Default": "10.0.0.10"
+        },
+        "AnsibleClientLinuxIP": {
+            "Description": "Linux client IP Address",
+            "Type": "String",
+            "Default": "10.0.0.12"
+        },
+        "AnsibleTowerInstanceType": {
+            "Description": "Amazon EC2 instance type for the Config Server",
+            "Type": "String",
+            "Default": "m4.large",
+            "AllowedValues": [
+                "t2.large",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge"
+            ]
+        },
+        "AnsibleClientInstanceType": {
+            "Description": "Amazon EC2 instance type for the Linux nodes.",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": [
+                "t2.medium",
+                "t2.large",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge"
+            ]
+        },
+
+        "VPCCIDR": {
+            "Description": "CIDR Block for the VPC",
+            "Type": "String",
+            "Default": "10.0.0.0/16",
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
+            "Description": "CIDR block for the VPC to create.",
+
         },
         "SubnetCIDR": {
-          "default": "Subnet CIDR"
+            "Description": "CIDR Block for the Public Subnet",
+            "Type": "String",
+            "Default": "10.0.0.0/19",
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
         },
-        "VPCCIDR": {
-          "default": "VPC CIDR"
+        "OSType": {
+            "AllowedValues": [
+                "CentOS-7",
+                "Redhat-Enterprise-Linux-7"
+            ],
+            "Default": "Redhat-Enterprise-Linux-7",
+            "Description": "The Linux distribution for Ansible Tower",
+            "Type": "String"
+        },
+        "QSS3BucketName": {
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Default": "quickstart-reference",
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Type": "String"
+        },
+        "QSS3KeyPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Default": "redhat/ansible/latest",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Type": "String"
         }
-      }
-    }
-  },
-  "Parameters": {
-    "KeyPairName": {
-      "Description": "Public/private key pair",
-      "Type": "AWS::EC2::KeyPair::KeyName"
     },
-    "AccessCIDR": {
-      "Description": "A value of 0.0.0.0/0 will allow access from ANY ip address",
-      "Type": "String",
-      "AllowedPattern": "[a-zA-Z0-9]+\\..+"
-    },
-    "AnsibleAdminPassword": {
-      "Description": "Password for Ansible Admin Must be at least 8 characters containing letters and (minimum 1 capital letter), numbers and symbols",
-      "Type": "String",
-      "MinLength": "8",
-      "MaxLength": "32",
-      "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
-      "NoEcho": "true"
-    },
-    "DatabaseAdminPassword": {
-      "Description": "Password for Ansible Admin Must be at least 8 characters containing letters and (minimum 1 capital letter), numbers and symbols",
-      "Type": "String",
-      "MinLength": "8",
-      "MaxLength": "32",
-      "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
-      "NoEcho": "true"
-    },
-    "AnsibleTowerIP": {
-      "Description": "Ansible Tower IP Address",
-      "Type": "String",
-      "Default": "10.0.0.10"
-    },
-    "AnsibleClientLinuxIP": {
-      "Description": "Linux client IP Address",
-      "Type": "String",
-      "Default": "10.0.0.12"
-    },
-    "AnsibleTowerInstanceType": {
-      "Description": "Amazon EC2 instance type for the Config Server",
-      "Type": "String",
-      "Default": "m4.large",
-      "AllowedValues": [
-        "t2.large",
-        "m4.large",
-        "m4.xlarge",
-        "m4.2xlarge",
-        "m4.4xlarge",
-        "m4.10xlarge",
-        "c4.large",
-        "c4.xlarge",
-        "c4.2xlarge",
-        "c4.4xlarge",
-        "c4.8xlarge",
-        "c3.large",
-        "c3.xlarge",
-        "c3.2xlarge",
-        "c3.4xlarge",
-        "c3.8xlarge",
-        "r3.large",
-        "r3.xlarge",
-        "r3.2xlarge",
-        "r3.4xlarge",
-        "r3.8xlarge",
-        "i2.xlarge",
-        "i2.2xlarge",
-        "i2.4xlarge",
-        "i2.8xlarge"
-      ]
-    },
-    "AnsibleClientInstanceType": {
-      "Description": "Amazon EC2 instance type for the Linux nodes.",
-      "Type": "String",
-      "Default": "t2.medium",
-      "AllowedValues": [
-        "t2.medium",
-        "t2.large",
-        "m4.large",
-        "m4.xlarge",
-        "m4.2xlarge",
-        "m4.4xlarge",
-        "m4.10xlarge",
-        "c4.large",
-        "c4.xlarge",
-        "c4.2xlarge",
-        "c4.4xlarge",
-        "c4.8xlarge",
-        "c3.large",
-        "c3.xlarge",
-        "c3.2xlarge",
-        "c3.4xlarge",
-        "c3.8xlarge",
-        "r3.large",
-        "r3.xlarge",
-        "r3.2xlarge",
-        "r3.4xlarge",
-        "r3.8xlarge",
-        "i2.xlarge",
-        "i2.2xlarge",
-        "i2.4xlarge",
-        "i2.8xlarge"
-      ]
-    },
-
-    "VPCCIDR": {
-      "Description": "CIDR Block for the VPC",
-      "Type": "String",
-      "Default": "10.0.0.0/16",
-      "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-      "Description": "CIDR block for the VPC to create.",
-
-    },
-    "SubnetCIDR": {
-      "Description": "CIDR Block for the Public Subnet",
-      "Type": "String",
-      "Default": "10.0.0.0/19",
-      "AllowedPattern": "[a-zA-Z0-9]+\\..+"
-    },
-    "OSType": {
-      "AllowedValues": [
-        "CentOS-7",
-        "Redhat-Enterprise-Linux-7"
-      ],
-      "Default": "Redhat-Enterprise-Linux-7",
-      "Description": "The Linux distribution for Ansible Tower",
-      "Type": "String"
-    },
-    "QSS3BucketName": {
-      "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
-      "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-      "Default": "quickstart-reference",
-      "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-      "Type": "String"
-    },
-    "QSS3KeyPrefix": {
-      "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
-      "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-      "Default": "redhat/ansible/latest",
-      "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-      "Type": "String"
-    }
-  },
-  "Conditions": {
-    "GovCloudCondition": {
-      "Fn::Equals": [{
-          "Ref": "AWS::Region"
-        },
-        "us-gov-west-1"
-      ]
-    },
-    "NestedStackCondition": {
-      "Fn::Equals": [{
-          "Ref": "QSS3KeyPrefix"
-        },
-        "redhat/ansible/latest"
-      ]
-    }
-  },
-  "Resources": {
-    "VPCStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Sub": [
-            "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/ansible-vpc.template", {
-              "S3Region": {
-                "Fn::If": [
-                  "GovCloudCondition",
-                  "s3-us-gov-west-1",
-                  "s3"
-                ]
-              }
-            }
-          ]
-        },
-        "Parameters": {
-          "KeyPairName": {
-            "Ref": "KeyPairName"
-          },
-          "SubnetCIDR": {
-            "Ref": "SubnetCIDR"
-          },
-          "VPCCIDR": {
-            "Ref": "VPCCIDR"
-          }
-        }
-      }
-    },
-    "TowerStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "DependsOn": "VPCStack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Sub": [
-            "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/ansible-tower.template", {
-              "S3Region": {
-                "Fn::If": [
-                  "GovCloudCondition",
-                  "s3-us-gov-west-1",
-                  "s3"
-                ]
-              }
-            }
-          ]
-        },
-        "Parameters": {
-          "KeyPairName": {
-            "Ref": "KeyPairName"
-          },
-          "AccessCIDR": {
-            "Ref": "AccessCIDR"
-          },
-          "AnsibleTowerIP": {
-            "Ref": "AnsibleTowerIP"
-          },
-          "AnsibleClientLinuxIP": {
-            "Ref": "AnsibleClientLinuxIP"
-          },
-          "AnsibleAdminPassword": {
-            "Ref": "AnsibleAdminPassword"
-          },
-          "DatabaseAdminPassword": {
-            "Ref": "DatabaseAdminPassword"
-          },
-          "AnsibleClientInstanceType": {
-            "Ref": "AnsibleClientInstanceType"
-          },
-          "AnsibleTowerInstanceType": {
-            "Ref": "AnsibleTowerInstanceType"
-          },
-          "OSType": {
-            "Ref": "OSType"
-          },
-          "VPCCIDR": {
-            "Ref": "VPCCIDR"
-          },
-          "VPCID": {
-            "Fn::GetAtt": [
-              "VPCStack",
-              "Outputs.VPCID"
+    "Conditions": {
+        "GovCloudCondition": {
+            "Fn::Equals": [{
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
             ]
-          },
-          "SubnetId": {
-            "Fn::GetAtt": [
-              "VPCStack",
-              "Outputs.SubnetId"
+        },
+        "NestedStackCondition": {
+            "Fn::Equals": [{
+                    "Ref": "QSS3KeyPrefix"
+                },
+                "redhat/ansible/latest"
             ]
-          }
-
         }
-      }
+    },
+    "Resources": {
+        "VPCStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/ansible-vpc.template", {
+                            "S3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Parameters": {
+                    "KeyPairName": {
+                        "Ref": "KeyPairName"
+                    },
+                    "SubnetCIDR": {
+                        "Ref": "SubnetCIDR"
+                    },
+                    "VPCCIDR": {
+                        "Ref": "VPCCIDR"
+                    }
+                }
+            }
+        },
+        "TowerStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "VPCStack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/ansible-tower.template", {
+                            "S3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Parameters": {
+                    "KeyPairName": {
+                        "Ref": "KeyPairName"
+                    },
+                    "AccessCIDR": {
+                        "Ref": "AccessCIDR"
+                    },
+                    "AnsibleTowerIP": {
+                        "Ref": "AnsibleTowerIP"
+                    },
+                    "AnsibleClientLinuxIP": {
+                        "Ref": "AnsibleClientLinuxIP"
+                    },
+                    "AnsibleAdminPassword": {
+                        "Ref": "AnsibleAdminPassword"
+                    },
+                    "DatabaseAdminPassword": {
+                        "Ref": "DatabaseAdminPassword"
+                    },
+                    "AnsibleClientInstanceType": {
+                        "Ref": "AnsibleClientInstanceType"
+                    },
+                    "AnsibleTowerInstanceType": {
+                        "Ref": "AnsibleTowerInstanceType"
+                    },
+                    "OSType": {
+                        "Ref": "OSType"
+                    },
+                    "VPCCIDR": {
+                        "Ref": "VPCCIDR"
+                    },
+                    "VPCID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.VPCID"
+                        ]
+                    },
+                    "SubnetId": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.SubnetId"
+                        ]
+                    }
+
+                }
+            }
+        }
     }
-  }
 }

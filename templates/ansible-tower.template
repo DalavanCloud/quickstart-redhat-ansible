@@ -97,7 +97,7 @@
             "Type": "AWS::EC2::Subnet::Id"
         },
         "VPCID": {
-            "Description": "VPC Id",
+            "Description": "VPC ID",
             "Type": "AWS::EC2::VPC::Id"
         },
         "AccessCIDR": {
