@@ -29,14 +29,6 @@
                     "AnsibleClientInstanceType",
                     "OSType"
                 ]
-            }, {
-                "Label": {
-                    "default": "AWS Quick Start Configuration"
-                },
-                "Parameters": [
-                    "QSS3BucketName",
-                    "QSS3KeyPrefix"
-                ]
             }],
             "ParameterLabels": {
                 "KeyPairName": {
@@ -47,12 +39,6 @@
                 },
                 "AnsibleClientInstanceType": {
                     "default": "Client Instance Type"
-                },
-                "QSS3BucketName": {
-                    "default": "Quick Start S3 Bucket Name"
-                },
-                "QSS3KeyPrefix": {
-                    "default": "Quick Start S3 Key Prefix"
                 },
                 "DatabaseAdminPassword": {
                     "default": "Database Admin Password"
@@ -103,7 +89,6 @@
         "AccessCIDR": {
             "Description": "CIDR Block or IP for SSH and RDP access",
             "Type": "String",
-            "Default": "0.0.0.0/0",
             "AllowedPattern": "[a-zA-Z0-9]+\\..+"
         },
         "AnsibleTowerIP": {
