@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,24,2016",
+  "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,26,2016",
   "Metadata": {
     "AWS::CloudFormation::Interface": {
       "ParameterGroups": [{
@@ -55,7 +55,7 @@
           "default": "Database Admin Password"
         },
         "AnsibleAdminPassword": {
-          "default": "Ansible Tower Admin Pasword"
+          "default": "Ansible Tower Admin Password"
         },
         "OSType": {
           "default": "Operating System"
@@ -67,10 +67,10 @@
           "default": "Linux Client IP address"
         },
         "AccessCIDR": {
-          "default": "Access CIDR"
+          "default": "Permitted IP range"
         },
         "SubnetCIDR": {
-          "default": "CIDR Block for the Public Subnet"
+          "default": "Subnet CIDR"
         },
         "VPCCIDR": {
           "default": "VPC CIDR"
@@ -86,7 +86,6 @@
     "AccessCIDR": {
       "Description": "A value of 0.0.0.0/0 will allow access from ANY ip address",
       "Type": "String",
-      "Default": "0.0.0.0/0",
       "AllowedPattern": "[a-zA-Z0-9]+\\..+"
     },
     "AnsibleAdminPassword": {
@@ -185,7 +184,9 @@
       "Description": "CIDR Block for the VPC",
       "Type": "String",
       "Default": "10.0.0.0/16",
-      "AllowedPattern": "[a-zA-Z0-9]+\\..+"
+      "AllowedPattern": "[a-zA-Z0-9]+\\..+",
+      "Description": "CIDR block for the VPC to create.",
+
     },
     "SubnetCIDR": {
       "Description": "CIDR Block for the Public Subnet",

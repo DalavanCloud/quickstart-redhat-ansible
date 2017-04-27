@@ -1,6 +1,92 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "QS(0022) Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,24,2016",
+    "Description": "QS(0022) Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,26,2016",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [{
+                "Label": {
+                    "default": "Network Configuration"
+                },
+                "Parameters": [
+                    "VPCCIDR",
+                    "AccessCIDR",
+                    "SubnetCIDR",
+                    "SubnetId",
+                    "VPCID"
+
+                ]
+            }, {
+                "Label": {
+                    "default": "Ansible Configuration"
+                },
+                "Parameters": [
+                    "KeyPairName",
+                    "AnsibleTowerIP",
+                    "AnsibleClientLinuxIP",
+                    "AnsibleAdminPassword",
+                    "DatabaseAdminPassword",
+                    "AnsibleTowerInstanceType",
+                    "AnsibleClientInstanceType",
+                    "OSType"
+                ]
+            }, {
+                "Label": {
+                    "default": "AWS Quick Start Configuration"
+                },
+                "Parameters": [
+                    "QSS3BucketName",
+                    "QSS3KeyPrefix"
+                ]
+            }],
+            "ParameterLabels": {
+                "KeyPairName": {
+                    "default": "Key Pair Name"
+                },
+                "AnsibleTowerInstanceType": {
+                    "default": "Tower Instance Type"
+                },
+                "AnsibleClientInstanceType": {
+                    "default": "Client Instance Type"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start S3 Bucket Name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Key Prefix"
+                },
+                "DatabaseAdminPassword": {
+                    "default": "Database Admin Password"
+                },
+                "AnsibleAdminPassword": {
+                    "default": "Ansible Tower Admin Password"
+                },
+                "OSType": {
+                    "default": "Operating System"
+                },
+                "AnsibleTowerIP": {
+                    "default": "Ansible Tower IP Address"
+                },
+                "AnsibleClientLinuxIP": {
+                    "default": "Linux Client IP address"
+                },
+                "AccessCIDR": {
+                    "default": "Permitted IP range"
+                },
+                "SubnetCIDR": {
+                    "default": "Subnet CIDR"
+                },
+                "VPCCIDR": {
+                    "default": "VPC CIDR"
+                },
+                "VPCID": {
+                    "default": "VPC ID"
+                },
+                "SubnetId": {
+                    "default": "Subnet ID"
+                }
+            }
+        }
+    },
     "Parameters": {
         "KeyPairName": {
             "Description": "Public/private key pair",
@@ -21,12 +107,12 @@
             "AllowedPattern": "[a-zA-Z0-9]+\\..+"
         },
         "AnsibleTowerIP": {
-            "Description": "IP for the ansible master",
+            "Description": "IP for the Ansible master",
             "Type": "String",
             "Default": "172.31.0.10"
         },
         "AnsibleClientLinuxIP": {
-            "Description": "IP for the ansible client",
+            "Description": "IP for the Ansible client",
             "Type": "String",
             "Default": "172.31.0.11"
         },
@@ -215,16 +301,13 @@
                             "/etc/cfn/cfn-hup.conf": {
                                 "content": {
                                     "Fn::Join": [
-                                        "",
-                                        [
+                                        "", [
                                             "[main]\n",
-                                            "stack=",
-                                            {
+                                            "stack=", {
                                                 "Ref": "AWS::StackId"
                                             },
                                             "\n",
-                                            "region=",
-                                            {
+                                            "region=", {
                                                 "Ref": "AWS::Region"
                                             },
                                             "\n"
@@ -238,15 +321,12 @@
                             "/etc/qsadmin.conf": {
                                 "content": {
                                     "Fn::Join": [
-                                        "",
-                                        [
-                                            "ansible_admin_password|",
-                                            {
+                                        "", [
+                                            "ansible_admin_password|", {
                                                 "Ref": "AnsibleAdminPassword"
                                             },
                                             "\n",
-                                            "ansible_dbadmin_password|",
-                                            {
+                                            "ansible_dbadmin_password|", {
                                                 "Ref": "DatabaseAdminPassword"
                                             },
                                             "\n"
@@ -264,14 +344,11 @@
             "Properties": {
                 "ImageId": {
                     "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
+                        "AWSAMIRegionMap", {
                             "Ref": "AWS::Region"
-                        },
-                        {
+                        }, {
                             "Fn::FindInMap": [
-                                "LinuxAMINameMap",
-                                {
+                                "LinuxAMINameMap", {
                                     "Ref": "OSType"
                                 },
                                 "Code"
@@ -279,57 +356,45 @@
                         }
                     ]
                 },
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/sda1",
-                        "Ebs": {
-                            "VolumeSize": "50"
-                        }
+                "BlockDeviceMappings": [{
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "VolumeSize": "50"
                     }
-                ],
+                }],
                 "InstanceType": {
                     "Ref": "AnsibleTowerInstanceType"
                 },
-                "NetworkInterfaces": [
-                    {
-                        "DeleteOnTermination": "true",
-                        "DeviceIndex": 0,
-                        "SubnetId": {
-                            "Ref": "SubnetId"
-                        },
-                        "PrivateIpAddresses": [
-                            {
-                                "Primary": "true",
-                                "PrivateIpAddress": {
-                                    "Ref": "AnsibleTowerIP"
-                                }
-                            }
-                        ],
-                        "GroupSet": [
-                            {
-                                "Ref": "AnsibleTowerSecurityGroup"
-                            }
-                        ]
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "AnsibleTower"
+                "NetworkInterfaces": [{
+                    "DeleteOnTermination": "true",
+                    "DeviceIndex": 0,
+                    "SubnetId": {
+                        "Ref": "SubnetId"
                     },
-                    {
-                        "Key": "Tower",
-                        "Value": "Managed"
-                    }
-                ],
+                    "PrivateIpAddresses": [{
+                        "Primary": "true",
+                        "PrivateIpAddress": {
+                            "Ref": "AnsibleTowerIP"
+                        }
+                    }],
+                    "GroupSet": [{
+                        "Ref": "AnsibleTowerSecurityGroup"
+                    }]
+                }],
+                "Tags": [{
+                    "Key": "Name",
+                    "Value": "AnsibleTower"
+                }, {
+                    "Key": "Tower",
+                    "Value": "Managed"
+                }],
                 "KeyName": {
                     "Ref": "KeyPairName"
                 },
                 "UserData": {
                     "Fn::Base64": {
                         "Fn::Join": [
-                            "",
-                            [
+                            "", [
                                 "#!/bin/bash \n",
                                 "yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm\n",
                                 "yum install -y python-setuptools\n",
@@ -342,20 +407,17 @@
                                 "yum install -y python-httplib\n",
                                 "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "/usr/bin/cfn-init ",
-                                " --stack ",
-                                {
+                                " --stack ", {
                                     "Ref": "AWS::StackName"
                                 },
                                 " --resource AnsibleTower ",
-                                " --region ",
-                                {
+                                " --region ", {
                                     "Ref": "AWS::Region"
                                 },
                                 "\n",
                                 "/usr/bin/cfn-signal",
                                 " -e $?",
-                                " '",
-                                {
+                                " '", {
                                     "Ref": "WaitforCfnTools"
                                 },
                                 "'",
@@ -366,8 +428,7 @@
                                 "./ansible-tower.sh; \n",
                                 "/usr/bin/cfn-signal",
                                 " -e $?",
-                                " '",
-                                {
+                                " '", {
                                     "Ref": "WaitforAnsibleTowerInstall"
                                 },
                                 "'",
@@ -410,8 +471,7 @@
             "Properties": {
                 "ImageId": {
                     "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
+                        "AWSAMIRegionMap", {
                             "Ref": "AWS::Region"
                         },
                         "RHEL72HVM"
@@ -420,46 +480,36 @@
                 "InstanceType": {
                     "Ref": "AnsibleClientInstanceType"
                 },
-                "NetworkInterfaces": [
-                    {
-                        "DeleteOnTermination": "true",
-                        "DeviceIndex": 0,
-                        "SubnetId": {
-                            "Ref": "SubnetId"
-                        },
-                        "PrivateIpAddresses": [
-                            {
-                                "Primary": "true",
-                                "PrivateIpAddress": {
-                                    "Ref": "AnsibleClientLinuxIP"
-                                }
-                            }
-                        ],
-                        "GroupSet": [
-                            {
-                                "Ref": "AnsibleClientLinuxSecurityGroup"
-                            }
-                        ]
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "AnsibleClient"
+                "NetworkInterfaces": [{
+                    "DeleteOnTermination": "true",
+                    "DeviceIndex": 0,
+                    "SubnetId": {
+                        "Ref": "SubnetId"
                     },
-                    {
-                        "Key": "Tower",
-                        "Value": "Managed"
-                    }
-                ],
+                    "PrivateIpAddresses": [{
+                        "Primary": "true",
+                        "PrivateIpAddress": {
+                            "Ref": "AnsibleClientLinuxIP"
+                        }
+                    }],
+                    "GroupSet": [{
+                        "Ref": "AnsibleClientLinuxSecurityGroup"
+                    }]
+                }],
+                "Tags": [{
+                    "Key": "Name",
+                    "Value": "AnsibleClient"
+                }, {
+                    "Key": "Tower",
+                    "Value": "Managed"
+                }],
                 "KeyName": {
                     "Ref": "KeyPairName"
                 },
                 "UserData": {
                     "Fn::Base64": {
                         "Fn::Join": [
-                            "",
-                            [
+                            "", [
                                 "#!/bin/bash\n",
                                 "date >/root/born_date",
                                 "\n"
@@ -476,48 +526,42 @@
                 "VpcId": {
                     "Ref": "VPCID"
                 },
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
-                        "CidrIp": {
-                            "Ref": "AccessCIDR"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
-                        "CidrIp": {
-                            "Ref": "VPCCIDR"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "443",
-                        "ToPort": "443",
-                        "CidrIp": {
-                            "Ref": "AccessCIDR"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "8080",
-                        "ToPort": "8080",
-                        "CidrIp": {
-                            "Ref": "AccessCIDR"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
-                        "CidrIp": {
-                            "Ref": "AccessCIDR"
-                        }
+                "SecurityGroupIngress": [{
+                    "IpProtocol": "tcp",
+                    "FromPort": "22",
+                    "ToPort": "22",
+                    "CidrIp": {
+                        "Ref": "AccessCIDR"
                     }
-                ]
+                }, {
+                    "IpProtocol": "tcp",
+                    "FromPort": "22",
+                    "ToPort": "22",
+                    "CidrIp": {
+                        "Ref": "VPCCIDR"
+                    }
+                }, {
+                    "IpProtocol": "tcp",
+                    "FromPort": "443",
+                    "ToPort": "443",
+                    "CidrIp": {
+                        "Ref": "AccessCIDR"
+                    }
+                }, {
+                    "IpProtocol": "tcp",
+                    "FromPort": "8080",
+                    "ToPort": "8080",
+                    "CidrIp": {
+                        "Ref": "AccessCIDR"
+                    }
+                }, {
+                    "IpProtocol": "tcp",
+                    "FromPort": "80",
+                    "ToPort": "80",
+                    "CidrIp": {
+                        "Ref": "AccessCIDR"
+                    }
+                }]
             }
         },
         "AnsibleClientLinuxSecurityGroup": {
@@ -527,24 +571,21 @@
                 "VpcId": {
                     "Ref": "VPCID"
                 },
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
-                        "CidrIp": {
-                            "Ref": "AccessCIDR"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
-                        "CidrIp": {
-                            "Ref": "VPCCIDR"
-                        }
+                "SecurityGroupIngress": [{
+                    "IpProtocol": "tcp",
+                    "FromPort": "22",
+                    "ToPort": "22",
+                    "CidrIp": {
+                        "Ref": "AccessCIDR"
                     }
-                ]
+                }, {
+                    "IpProtocol": "tcp",
+                    "FromPort": "22",
+                    "ToPort": "22",
+                    "CidrIp": {
+                        "Ref": "VPCCIDR"
+                    }
+                }]
             }
         }
     },
@@ -552,10 +593,8 @@
         "AnsibleTowerURL": {
             "Value": {
                 "Fn::Join": [
-                    "/",
-                    [
-                        "https:/",
-                        {
+                    "/", [
+                        "https:/", {
                             "Fn::GetAtt": [
                                 "AnsibleTower",
                                 "PublicDnsName"
