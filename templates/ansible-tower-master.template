@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,26,2016",
+    "Description": "Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) June,2,2017",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [{
@@ -181,11 +181,10 @@
         },
 
         "VPCCIDR": {
-            "Description": "CIDR Block for the VPC",
+            "Description": "CIDR block for the VPC to create.",
             "Type": "String",
             "Default": "10.0.0.0/16",
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-            "Description": "CIDR block for the VPC to create."
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
         },
         "SubnetCIDR": {
             "Description": "CIDR Block for the Public Subnet",
@@ -203,18 +202,18 @@
             "Type": "String"
         },
         "QSS3BucketName": {
+            "Type": "String",
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
             "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
             "Default": "quickstart-reference",
-            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-            "Type": "String"
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
         },
         "QSS3KeyPrefix": {
-            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
-            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-            "Default": "redhat/ansible/latest",
-            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-            "Type": "String"
+            "Type": "String",
+            "AllowedPattern": "^[0-9a-zA-Z-/]*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Default": "redhat/ansible/latest/",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/)."
         }
     },
     "Conditions": {
@@ -224,13 +223,6 @@
                 },
                 "us-gov-west-1"
             ]
-        },
-        "NestedStackCondition": {
-            "Fn::Equals": [{
-                    "Ref": "QSS3KeyPrefix"
-                },
-                "redhat/ansible/latest"
-            ]
         }
     },
     "Resources": {
@@ -239,7 +231,7 @@
             "Properties": {
                 "TemplateURL": {
                     "Fn::Sub": [
-                        "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/ansible-vpc.template", {
+                        "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}templates/ansible-vpc.template", {
                             "S3Region": {
                                 "Fn::If": [
                                     "GovCloudCondition",
@@ -269,7 +261,7 @@
             "Properties": {
                 "TemplateURL": {
                     "Fn::Sub": [
-                        "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}/templates/ansible-tower.template", {
+                        "https://${QSS3BucketName}.${S3Region}.amazonaws.com/${QSS3KeyPrefix}templates/ansible-tower.template", {
                             "S3Region": {
                                 "Fn::If": [
                                     "GovCloudCondition",
@@ -322,6 +314,12 @@
                             "VPCStack",
                             "Outputs.SubnetId"
                         ]
+                    },
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Ref": "QSS3KeyPrefix"
                     }
 
                 }

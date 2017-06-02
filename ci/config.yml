@@ -18,5 +18,5 @@ global:
   reporting: true
 tests:
   tower:
-    parameter_input: ansible-tower-master.json
+    parameter_input: ansible-tower-alfred.json
     template_file: ansible-tower-master.template

@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "QS(0022) Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) April,26,2016",
+    "Description": "QS(0022) Redhat Ansible Tower, License: Apache 2.0 (Please do not remove) June,2,2017",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -29,6 +29,14 @@
                         "AnsibleTowerInstanceType",
                         "AnsibleClientInstanceType",
                         "OSType"
+                    ]
+                }, {
+                    "Label": {
+
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
                     ]
                 }
             ],
@@ -71,6 +79,13 @@
                 },
                 "SubnetId": {
                     "default": "Subnet ID"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start bucket name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Prefix"
+
                 }
             }
         }
@@ -198,6 +213,20 @@
             "Default": "Redhat-Enterprise-Linux-7",
             "Description": "The Linux distribution for Ansible Tower",
             "Type": "String"
+        },
+        "QSS3BucketName": {
+            "Type": "String",
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Default": "quickstart-reference",
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
+        },
+        "QSS3KeyPrefix": {
+            "Type": "String",
+            "AllowedPattern": "^[0-9a-zA-Z-/]*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Default": "redhat/ansible/latest/",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/)."
         }
     },
     "Mappings": {
@@ -272,10 +301,94 @@
             }
         }
     },
+    "Conditions": {
+        "GovCloudCondition": {
+            "Fn::Equals": [{
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
+        }
+    },
     "Resources": {
+        "AnsibleHostRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "s3:GetObject",
+                                        "s3:ListObject"
+                                    ],
+                                    "Resource": {
+                                        "Fn::Sub": [
+                                            "arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*",
+                                            {
+                                                "Partition": {
+                                                    "Fn::If": [
+                                                        "GovCloudCondition",
+                                                        "aws-us-gov",
+                                                        "aws"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "Effect": "Allow"
+                                }
+                            ]
+                        },
+                        "PolicyName": "aws-quick-start-s3-policy"
+                }],
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            },
+                            "Effect": "Allow"
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                }
+            }
+        },
+        "AnsibleHostProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Roles": [
+                    {
+                        "Ref": "AnsibleHostRole"
+                    }
+                ],
+                "Path": "/"
+              }
+        },
         "AnsibleTower": {
             "Type": "AWS::EC2::Instance",
             "Metadata": {
+                "AWS::CloudFormation::Authentication": {
+                    "S3AccessCreds": {
+                        "type": "S3",
+                        "roleName": {
+                            "Ref": "AnsibleHostRole"
+                        },
+                        "buckets": [
+                            {
+                                "Ref": "QSS3BucketName"
+                            }
+                        ]
+                    }
+                },
                 "AWS::CloudFormation::Init": {
                     "config": {
                         "packages": {
@@ -301,7 +414,7 @@
                                                 "Ref": "AWS::Region"
                                             },
                                             "\n"
-                                        ]
+]
                                     ]
                                 },
                                 "mode": "000400",
@@ -335,6 +448,7 @@
                 }
             },
             "Properties": {
+                "IamInstanceProfile": { "Ref": "AnsibleHostProfile" },
                 "ImageId": {
                     "Fn::FindInMap": [
                         "AWSAMIRegionMap",
@@ -403,7 +517,8 @@
                         "Fn::Join": [
                             "",
                             [
-                                "#!/bin/bash \n",
+                                "#!/bin/bash -e \n",
+                                "yum install -y gcc libffi-devel python-devel openssl-devel\n",
                                 "yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm\n",
                                 "yum install -y python-setuptools\n",
                                 "yum install -y python-daemon\n",
@@ -412,39 +527,18 @@
                                 "yum install -y python-paramiko\n",
                                 "yum install -y python-keyczar\n",
                                 "yum install -y python-crypto\n",
-                                "yum install -y python-httplib\n",
+                                "yum install -y python-pip\n",
+                                "pip install --upgrade pip\n",
+                                "pip install httplib2\n",
+                                "pip install awscli\n",
+                                "pip install pyopenssl ndg-httpsclient pyasn1\n",
                                 "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
-                                "/usr/bin/cfn-init ",
-                                " --stack ",
-                                {
-                                    "Ref": "AWS::StackName"
-                                },
-                                " --resource AnsibleTower ",
-                                " --region ",
-                                {
-                                    "Ref": "AWS::Region"
-                                },
-                                "\n",
-                                "/usr/bin/cfn-signal",
-                                " -e $?",
-                                " '",
-                                {
-                                    "Ref": "WaitforCfnTools"
-                                },
-                                "'",
-                                "\n",
-                                "SRC=https://s3.amazonaws.com/quickstart-reference/redhat/ansible/latest/scripts/ansible-tower.sh; \n",
-                                "curl -s ${SRC} -O; \n",
+                                {"Fn::Sub": "/usr/bin/cfn-init -v --stack ${AWS::StackName} --resource AnsibleTower --region ${AWS::Region}\n"},
+                                {"Fn::Sub": "/usr/bin/cfn-signal -e $? '${WaitforCfnTools}'\n"},
+                                {"Fn::Sub": "aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/ansible-tower.sh ansible-tower.sh; \n"},
                                 "chmod 755 ansible-tower.sh; \n",
-                                "./ansible-tower.sh; \n",
-                                "/usr/bin/cfn-signal",
-                                " -e $?",
-                                " '",
-                                {
-                                    "Ref": "WaitforAnsibleTowerInstall"
-                                },
-                                "'",
-                                "\n"
+                                "./ansible-tower.sh;\n",
+                                {"Fn::Sub": "/usr/bin/cfn-signal -e $? '${WaitforAnsibleTowerInstall}'\n"}
                             ]
                         ]
                     }
@@ -479,7 +573,7 @@
         },
         "LinuxClient": {
             "Type": "AWS::EC2::Instance",
-            "DependsOn": "AnsibleTower",
+            "DependsOn": "AnsibleTowerWaitCondition",
             "Properties": {
                 "ImageId": {
                     "Fn::FindInMap": [
