@@ -1,0 +1,38 @@
+[
+    {
+        "ParameterKey": "AnsibleAdminPassword",
+        "ParameterValue": "$[alfred_genpass_8]"
+    },
+    {
+        "ParameterKey": "AnsibleClientLinuxIP",
+        "ParameterValue": "10.0.0.10"
+    },
+    {
+        "ParameterKey": "AnsibleTowerIP",
+        "ParameterValue": "10.0.0.12"
+    },
+    {
+        "ParameterKey": "DatabaseAdminPassword",
+        "ParameterValue": "$[alfred_genpass_8]"
+    },
+    {
+        "ParameterKey": "KeyPairName",
+        "ParameterValue": "tonynv"
+    },
+    {
+        "ParameterKey": "AccessCIDR",
+        "ParameterValue": "0.0.0.0/0"
+    },
+    {
+        "ParameterKey": "VPCCIDR",
+        "ParameterValue": "10.0.0.0/16"
+    },
+    {
+        "ParameterKey": "QSS3KeyPrefix",
+        "ParameterValue": "quickstart-redhat-ansible/"
+    },
+    {
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "tonynv"
+    }
+]
