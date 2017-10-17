@@ -30,10 +30,9 @@
                         "AnsibleClientInstanceType",
                         "OSType"
                     ]
-                }, {
-                    "Label": {
-
-                    },
+                },
+                {
+                    "Label": {},
                     "Parameters": [
                         "QSS3BucketName",
                         "QSS3KeyPrefix"
@@ -85,7 +84,6 @@
                 },
                 "QSS3KeyPrefix": {
                     "default": "Quick Start S3 Prefix"
-
                 }
             }
         }
@@ -232,63 +230,63 @@
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {
-                "CENTOS7HVM": "CentOS Linux 7 x86_64 HVM EBS 1704_01-b7ee8a69-ee97-4a49-9e68-afaee216db2e-ami-d52f5bc3.4",
+                "CENTOS7HVM": "CentOS Linux 7 x86_64 HVM EBS 1708_01-b7ee8a69-ee97-4a49-9e68-afaee216db2e-ami-0d8f9576.4",
                 "RHEL72HVM": "RHEL-7.2_HVM-20161025-x86_64-1-Hourly2-GP2"
             },
             "ap-northeast-1": {
-                "CENTOS7HVM": "ami-29d1e34e",
+                "CENTOS7HVM": "ami-e4599a82",
                 "RHEL72HVM": "ami-2265c543"
             },
             "ap-northeast-2": {
-                "CENTOS7HVM": "ami-08e93466",
+                "CENTOS7HVM": "ami-ea12c984",
                 "RHEL72HVM": "ami-a9e532c7"
             },
             "ap-south-1": {
-                "CENTOS7HVM": "ami-3c0e7353",
+                "CENTOS7HVM": "ami-ccde99a3",
                 "RHEL72HVM": "ami-917205fe"
             },
             "ap-southeast-1": {
-                "CENTOS7HVM": "ami-7d2eab1e",
+                "CENTOS7HVM": "ami-1fbad07c",
                 "RHEL72HVM": "ami-22953841"
             },
             "ap-southeast-2": {
-                "CENTOS7HVM": "ami-34171d57",
+                "CENTOS7HVM": "ami-e9c7208b",
                 "RHEL72HVM": "ami-91cdf0f2"
             },
             "ca-central-1": {
-                "CENTOS7HVM": "ami-28823e4c",
+                "CENTOS7HVM": "ami-cbd069af",
                 "RHEL72HVM": "ami-b764d6d3"
             },
             "eu-central-1": {
-                "CENTOS7HVM": "ami-fa2df395",
+                "CENTOS7HVM": "ami-2540f74a",
                 "RHEL72HVM": "ami-7def1712"
             },
             "eu-west-1": {
-                "CENTOS7HVM": "ami-061b1560",
+                "CENTOS7HVM": "ami-5f76b626",
                 "RHEL72HVM": "ami-b22961c1"
             },
             "eu-west-2": {
-                "CENTOS7HVM": "ami-e05a4d84",
+                "CENTOS7HVM": "ami-951201f1",
                 "RHEL72HVM": "ami-b9353fdd"
             },
             "sa-east-1": {
-                "CENTOS7HVM": "ami-b31a75df",
+                "CENTOS7HVM": "ami-afd7a5c3",
                 "RHEL72HVM": "ami-28f66a44"
             },
             "us-east-1": {
-                "CENTOS7HVM": "ami-46c1b650",
+                "CENTOS7HVM": "ami-db48ada1",
                 "RHEL72HVM": "ami-873e6190"
             },
             "us-east-2": {
-                "CENTOS7HVM": "ami-18f8df7d",
+                "CENTOS7HVM": "ami-d61133b3",
                 "RHEL72HVM": "ami-0a33696f"
             },
             "us-west-1": {
-                "CENTOS7HVM": "ami-f5d7f195",
+                "CENTOS7HVM": "ami-8a6751ea",
                 "RHEL72HVM": "ami-f88fc498"
             },
             "us-west-2": {
-                "CENTOS7HVM": "ami-f4533694",
+                "CENTOS7HVM": "ami-e535c59d",
                 "RHEL72HVM": "ami-5dd3743d"
             }
         },
@@ -303,7 +301,8 @@
     },
     "Conditions": {
         "GovCloudCondition": {
-            "Fn::Equals": [{
+            "Fn::Equals": [
+                {
                     "Ref": "AWS::Region"
                 },
                 "us-gov-west-1"
@@ -343,7 +342,8 @@
                             ]
                         },
                         "PolicyName": "aws-quick-start-s3-policy"
-                }],
+                    }
+                ],
                 "AssumeRolePolicyDocument": {
                     "Statement": [
                         {
@@ -371,7 +371,7 @@
                     }
                 ],
                 "Path": "/"
-              }
+            }
         },
         "AnsibleTower": {
             "Type": "AWS::EC2::Instance",
@@ -414,7 +414,7 @@
                                                 "Ref": "AWS::Region"
                                             },
                                             "\n"
-]
+                                        ]
                                     ]
                                 },
                                 "mode": "000400",
@@ -448,7 +448,9 @@
                 }
             },
             "Properties": {
-                "IamInstanceProfile": { "Ref": "AnsibleHostProfile" },
+                "IamInstanceProfile": {
+                    "Ref": "AnsibleHostProfile"
+                },
                 "ImageId": {
                     "Fn::FindInMap": [
                         "AWSAMIRegionMap",
@@ -533,12 +535,20 @@
                                 "pip install awscli\n",
                                 "pip install pyopenssl ndg-httpsclient pyasn1\n",
                                 "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
-                                {"Fn::Sub": "/usr/bin/cfn-init -v --stack ${AWS::StackName} --resource AnsibleTower --region ${AWS::Region}\n"},
-                                {"Fn::Sub": "/usr/bin/cfn-signal -e $? '${WaitforCfnTools}'\n"},
-                                {"Fn::Sub": "aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/ansible-tower.sh ansible-tower.sh; \n"},
+                                {
+                                    "Fn::Sub": "/usr/bin/cfn-init -v --stack ${AWS::StackName} --resource AnsibleTower --region ${AWS::Region}\n"
+                                },
+                                {
+                                    "Fn::Sub": "/usr/bin/cfn-signal -e $? '${WaitforCfnTools}'\n"
+                                },
+                                {
+                                    "Fn::Sub": "aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/ansible-tower.sh ansible-tower.sh; \n"
+                                },
                                 "chmod 755 ansible-tower.sh; \n",
                                 "./ansible-tower.sh;\n",
-                                {"Fn::Sub": "/usr/bin/cfn-signal -e $? '${WaitforAnsibleTowerInstall}'\n"}
+                                {
+                                    "Fn::Sub": "/usr/bin/cfn-signal -e $? '${WaitforAnsibleTowerInstall}'\n"
+                                }
                             ]
                         ]
                     }
