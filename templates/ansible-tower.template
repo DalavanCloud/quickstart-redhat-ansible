@@ -230,63 +230,63 @@
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {
-                "CENTOS7HVM": "CentOS Linux 7 x86_64 HVM EBS 1708_11.01-b7ee8a69-ee97-4a49-9e68-afaee216db2e-ami-95096eef.4",
+                "CENTOS7HVM": "CentOS Linux 7 x86_64 HVM EBS 1801_01-b7ee8a69-ee97-4a49-9e68-afaee216db2e-ami-0a537770.4",
                 "RHEL72HVM": "RHEL-7.2_HVM-20161025-x86_64-1-Hourly2-GP2"
             },
             "ap-northeast-1": {
-                "CENTOS7HVM": "ami-4dd5522b",
+                "CENTOS7HVM": "ami-25bd2743",
                 "RHEL72HVM": "ami-2265c543"
             },
             "ap-northeast-2": {
-                "CENTOS7HVM": "ami-53a1073d",
+                "CENTOS7HVM": "ami-7248e81c",
                 "RHEL72HVM": "ami-a9e532c7"
             },
             "ap-south-1": {
-                "CENTOS7HVM": "ami-82a3eaed",
+                "CENTOS7HVM": "ami-5d99ce32",
                 "RHEL72HVM": "ami-917205fe"
             },
             "ap-southeast-1": {
-                "CENTOS7HVM": "ami-a6e88dda",
+                "CENTOS7HVM": "ami-d2fa88ae",
                 "RHEL72HVM": "ami-22953841"
             },
             "ap-southeast-2": {
-                "CENTOS7HVM": "ami-5b778339",
+                "CENTOS7HVM": "ami-b6bb47d4",
                 "RHEL72HVM": "ami-91cdf0f2"
             },
             "ca-central-1": {
-                "CENTOS7HVM": "ami-b111aad5",
+                "CENTOS7HVM": "ami-dcad28b8",
                 "RHEL72HVM": "ami-b764d6d3"
             },
             "eu-central-1": {
-                "CENTOS7HVM": "ami-1e038d71",
+                "CENTOS7HVM": "ami-337be65c",
                 "RHEL72HVM": "ami-7def1712"
             },
             "eu-west-1": {
-                "CENTOS7HVM": "ami-192a9460",
+                "CENTOS7HVM": "ami-6e28b517",
                 "RHEL72HVM": "ami-b22961c1"
             },
             "eu-west-2": {
-                "CENTOS7HVM": "ami-c8d7c9ac",
+                "CENTOS7HVM": "ami-ee6a718a",
                 "RHEL72HVM": "ami-b9353fdd"
             },
             "sa-east-1": {
-                "CENTOS7HVM": "ami-6b5c1b07",
+                "CENTOS7HVM": "ami-f9adef95",
                 "RHEL72HVM": "ami-28f66a44"
             },
             "us-east-1": {
-                "CENTOS7HVM": "ami-02e98f78",
+                "CENTOS7HVM": "ami-4bf3d731",
                 "RHEL72HVM": "ami-873e6190"
             },
             "us-east-2": {
-                "CENTOS7HVM": "ami-e0eac385",
+                "CENTOS7HVM": "ami-e1496384",
                 "RHEL72HVM": "ami-0a33696f"
             },
             "us-west-1": {
-                "CENTOS7HVM": "ami-b1a59fd1",
+                "CENTOS7HVM": "ami-65e0e305",
                 "RHEL72HVM": "ami-f88fc498"
             },
             "us-west-2": {
-                "CENTOS7HVM": "ami-b63ae0ce",
+                "CENTOS7HVM": "ami-a042f4d8",
                 "RHEL72HVM": "ami-5dd3743d"
             }
         },
