@@ -33,6 +33,6 @@
     },
     {
         "ParameterKey": "QSS3BucketName",
-        "ParameterValue": "tonynv"
+        "ParameterValue": "$[taskcat_autobucket]"
     }
 ]
