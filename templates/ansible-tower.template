@@ -530,6 +530,7 @@
                                 "yum install -y python-keyczar\n",
                                 "yum install -y python-crypto\n",
                                 "yum install -y python-pip\n",
+                                "yum install -y ansible\n",
                                 "pip install --upgrade pip\n",
                                 "pip install httplib2\n",
                                 "pip install awscli\n",
