@@ -17,11 +17,11 @@
     },
     {
         "ParameterKey": "KeyPairName",
-        "ParameterValue": "tonynv"
+        "ParameterValue": "cikey"
     },
     {
         "ParameterKey": "AccessCIDR",
-        "ParameterValue": "0.0.0.0/0"
+        "ParameterValue": "10.0.0.0/16"
     },
     {
         "ParameterKey": "VPCCIDR",
@@ -33,6 +33,6 @@
     },
     {
         "ParameterKey": "QSS3BucketName",
-        "ParameterValue": "tonynv"
+        "ParameterValue": "$[taskcat_autobucket]"
     }
 ]
